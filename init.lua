@@ -37,12 +37,17 @@ function log(method,url,data,ruletag)
         local ua = ngx.var.http_user_agent
         local servername=ngx.var.server_name
         local time=ngx.localtime()
-        if ua  then
-            line = realIp.." ["..time.."] \""..method.." "..servername..url.."\" \""..data.."\"  \""..ua.."\" \""..ruletag.."\"\n"
-        else
-            line = realIp.." ["..time.."] \""..method.." "..servername..url.."\" \""..data.."\" - \""..ruletag.."\"\n"
+        if ua==nil then
+            ua='-'
         end
-        local filename = logpath..'/'..servername.."_"..ngx.today().."_sec.log"
+        if realIp==nil then
+            realIp='-'
+        end
+        if servername==nil then
+            servername='-'
+       	end
+        line = realIp.." ["..time.."] \""..method.." "..servername..url.."\" \""..data.."\"  \""..ua.."\" \""..ruletag.."\"\n"
+        local filename = logpath..servername.."_"..ngx.today().."_sec.log"
         write(filename,line)
     end
 end
